@@ -93,14 +93,6 @@ def main():
         .stProgress > div > div > div > div {
             background-color: #FF4B4B;
         }
-        .upload-box {
-            border: 2px dashed #FF4B4B;
-            border-radius: 10px;
-            padding: 2rem;
-            text-align: center;
-            margin: 2rem 0;
-            background-color: rgba(255, 75, 75, 0.05);
-        }
         .instruction-box {
             background-color: white;
             padding: 1.5rem;
@@ -135,13 +127,6 @@ def main():
             </div>
         """, unsafe_allow_html=True)
 
-        # 文件上传区域
-        st.markdown("""
-            <div class='upload-box'>
-                <h4 style='color: #FF4B4B; margin-bottom: 1rem;'>📤 上传文件</h4>
-            </div>
-        """, unsafe_allow_html=True)
-        
         # 文件上传组件
         uploaded_file = st.file_uploader("选择Excel文件上传", type=['xlsx', 'xls'])
 
