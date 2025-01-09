@@ -5,6 +5,9 @@ import io
 from PIL import Image
 import os
 
+# 获取当前文件所在的目录路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
 def process_duplicates(df):
     """
     处理DataFrame中的重复客户编号，为每个社区生成唯一的客户编号。
@@ -105,7 +108,8 @@ def main():
 
         with example_col:
             # 显示示例图片
-            example_image = Image.open("example.png")
+            image_path = os.path.join(current_dir, "example.png")
+            example_image = Image.open(image_path)
             st.image(example_image, use_container_width=True)
 
         # 文件上传
