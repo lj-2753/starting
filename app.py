@@ -95,7 +95,7 @@ def main():
 
     with col2:
         # 创建两列布局用于说明和示例
-        instruction_col, example_col = st.columns(2)
+        instruction_col = st.columns(1)
         
         with instruction_col:
             st.markdown("""
