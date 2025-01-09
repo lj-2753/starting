@@ -106,12 +106,6 @@ def main():
                 </div>
             """, unsafe_allow_html=True)
 
-        with example_col:
-            # 显示示例图片
-            image_path = os.path.join(current_dir, "example.png")
-            example_image = Image.open(image_path)
-            st.image(example_image, use_container_width=True)
-
         # 文件上传
         st.markdown("<h4 style='color: #ff4b4b; margin-top: 2rem;'>📤 上传文件</h4>", unsafe_allow_html=True)
         uploaded_file = st.file_uploader("选择Excel文件上传", type=['xlsx', 'xls'])
