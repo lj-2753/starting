@@ -2,11 +2,6 @@ import streamlit as st
 import pandas as pd
 import time
 import io
-from PIL import Image
-import os
-
-# 获取当前文件所在的目录路径
-current_dir = os.path.dirname(os.path.abspath(__file__))
 
 def process_duplicates(df):
     """
@@ -38,22 +33,31 @@ def process_duplicates(df):
     for community in df['社区编号'].unique():
         # 创建当前社区的掩码
         community_mask = df['社区编号'] == community
+        
         # 根据掩码筛选出当前社区的数据并复制
         community_df = df[community_mask].copy()
         
-        # 获取重复的客户编号
-        duplicates = community_df[community_df.duplicated(['客户编号'], keep=False)]
-        
-        if not duplicates.empty:
-            # 对重复的客户编号进行处理
-            for original_id in duplicates['客户编号'].unique():
-                # 获取当前重复编号的所有行
-                duplicate_rows = community_df[community_df['客户编号'] == original_id]
-                
-                # 为重复的行生成新的编号（在原编号后添加-1, -2等）
-                for i, idx in enumerate(duplicate_rows.index[1:], 1):
-                    new_id = f"{original_id}-{i}"
-                    df.loc[idx, '修改后客户编号'] = new_id
+        # 找出所有重复项
+        seen_ids = set()
+        for idx in community_df.index:
+            # 获取原始客户编号
+            original_id = df.loc[idx, '客户编号']
+            # 取除最后一位外的部分作为基础ID
+            base_id = original_id[:-1]
+            
+            if original_id in seen_ids:
+                # 如果原始ID已存在，则生成新ID直到找到未使用的
+                for suffix in list('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
+                    new_id = base_id + suffix
+                    if new_id not in seen_ids:
+                        # 更新DataFrame中的'修改后客户编号'
+                        df.loc[idx, '修改后客户编号'] = new_id
+                        # 将新ID加入已见集合
+                        seen_ids.add(new_id)
+                        break
+            else:
+                # 如果原始ID不存在于已见集合中，直接加入
+                seen_ids.add(original_id)
     
     # 只保留需要的列
     df = df[['客户编号', '修改后客户编号']]
